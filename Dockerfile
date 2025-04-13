@@ -1,6 +1,7 @@
 # Install the app dependencies in a full Node docker image
-FROM node:18
+FROM node:18 AS build
 
+WORKDIR /usr/src/app
 # Copy package.json, and optionally package-lock.json if it exists
 COPY package.json package-lock.json* ./
 
@@ -13,9 +14,11 @@ RUN \
 # Copy the dependencies into a Slim Node docker image
 FROM node:18-alpine
 
+WORKDIR /usr/src/app
+
 # Install app dependencies
-COPY --from=0 /opt/app-root/src/node_modules /opt/app-root/src/node_modules
-COPY . /opt/app-root/src
+COPY --from=build /usr/src/app/node_modules /usr/src/app/node_modules
+COPY . /usr/src/app
 
 ENV NODE_ENV production
 ENV PORT 3001
