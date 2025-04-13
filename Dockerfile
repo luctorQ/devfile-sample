@@ -14,6 +14,7 @@ RUN \
 # Copy the dependencies into a Slim Node docker image
 FROM node:18-alpine
 
+USER root
 WORKDIR /usr/src/app
 
 # Install app dependencies
