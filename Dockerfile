@@ -17,7 +17,7 @@ FROM node:18-alpine
 RUN apk update
 RUN apk add git
 
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup -h /home/appuser -u 1001020000
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup -h /home/appuser
 
 USER appuser
 WORKDIR /home/appuser
