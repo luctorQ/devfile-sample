@@ -16,6 +16,8 @@ FROM node:18-alpine
 
 USER root
 WORKDIR /usr/src/app
+RUN apk update
+RUN apk add git
 
 # Install app dependencies
 COPY --from=build /usr/src/app/node_modules /usr/src/app/node_modules
