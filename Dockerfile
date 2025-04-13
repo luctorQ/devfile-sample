@@ -14,14 +14,17 @@ RUN \
 # Copy the dependencies into a Slim Node docker image
 FROM node:18-alpine
 
-USER root
-WORKDIR /usr/src/app
 RUN apk update
 RUN apk add git
 
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup -h /home/appuser
+
+USER appuser
+WORKDIR /home/appuser
+
 # Install app dependencies
-COPY --from=build /usr/src/app/node_modules /usr/src/app/node_modules
-COPY . /usr/src/app
+COPY --from=build /usr/src/app/node_modules /home/appuser/node_modules
+COPY . /home/appuser
 
 ENV NODE_ENV production
 ENV PORT 3001
