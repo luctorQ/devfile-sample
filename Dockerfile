@@ -16,6 +16,8 @@ FROM node:18-alpine
 
 RUN apk update
 RUN apk add git
+RUN apk add curl
+RUN apk add net-tools
 
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup -h /home/appuser
 
