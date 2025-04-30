@@ -1,9 +1,10 @@
 # Install the app dependencies in a full Node docker image
 FROM registry.access.redhat.com/ubi8/nodejs-18:latest
+USER 0
 RUN yum update
 RUN yum install git
 RUN yum install curl
-
+USER 1001
 # Copy package.json, and optionally package-lock.json if it exists
 COPY package.json package-lock.json* ./
 
