@@ -1,7 +1,9 @@
 # Install the app dependencies in a full Node docker image
-FROM node:18 AS build
+FROM registry.access.redhat.com/ubi8/nodejs-18:latest
+RUN yum update
+RUN yum install git
+RUN yum install curl
 
-WORKDIR /usr/src/app
 # Copy package.json, and optionally package-lock.json if it exists
 COPY package.json package-lock.json* ./
 
@@ -12,22 +14,11 @@ RUN \
   fi
 
 # Copy the dependencies into a Slim Node docker image
-FROM node:18-alpine
-
-RUN apk update
-RUN apk add git
-RUN apk add curl
-RUN apk add net-tools
-RUN apk add busybox-extras
-
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup -h /home/appuser
-
-USER appuser
-WORKDIR /home/appuser
+FROM registry.access.redhat.com/ubi8/nodejs-18-minimal:latest
 
 # Install app dependencies
-COPY --from=build /usr/src/app/node_modules /home/appuser/node_modules
-COPY . /home/appuser
+COPY --from=0 /opt/app-root/src/node_modules /opt/app-root/src/node_modules
+COPY . /opt/app-root/src
 
 ENV NODE_ENV production
 ENV PORT 3001
